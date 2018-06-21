@@ -1,18 +1,45 @@
 package com.example.aliaksei_kisel.bluetoothtest
 
 import android.Manifest
+import android.bluetooth.BluetoothAdapter
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.example.aliaksei_kisel.bluetoothtest.utils.toast
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    var bluetoothAdapter: BluetoothAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        buttonStartConnect.setOnClickListener {
+            outputTextView.append("Starting connect...")
+            startServer()
+        }
+
+        if (!checkPermission()) {
+            requestPermission()
+        } else {
+            checkBluetooth()
+        }
+    }
+
+    private fun checkBluetooth() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        if (bluetoothAdapter == null) {
+            outputTextView.append("No bluetooth device :(")
+            buttonStartConnect.isEnabled = false
+        }
+    }
+
+    private fun startServer() {
+
     }
 
     private fun checkPermission(): Boolean {
@@ -48,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty()
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     toast("Permission Bluetooth admin granted")
-                    //TODO start work
+                    checkBluetooth()
                 } else {
                     toast("Permission denied. Unfortunately the app won't work correctly")
                 }
