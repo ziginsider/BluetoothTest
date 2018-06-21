@@ -7,7 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.example.aliaksei_kisel.bluetoothtest.utils.loge
 
-class BluetoothBroadcastReceiver(private val callback: Callback) : BroadcastReceiver() {
+class BluetoothBroadcastReceiver(private val callback: CallbackReceiver) : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
@@ -51,7 +51,7 @@ class BluetoothBroadcastReceiver(private val callback: Callback) : BroadcastRece
 
         const val TAG = "BluetoothBroadcastReceiver"
 
-        fun register(callback: Callback, context: Context) {
+        fun register(callback: CallbackReceiver, context: Context) {
             context.registerReceiver(BluetoothBroadcastReceiver(callback), getFilter())
         }
 

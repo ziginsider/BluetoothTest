@@ -1,6 +1,6 @@
 package com.example.aliaksei_kisel.bluetoothtest
 
-interface Callback {
+interface CallbackReceiver {
 
     fun onBluetoothConnected()
 
