@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.example.aliaksei_kisel.bluetoothtest.utils.toast
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -87,5 +88,8 @@ class MainActivity : AppCompatActivity() {
 
         const val REQUEST_PERMISSION_BLUETOOTH = 33
         const val REQUEST_PERMISSION_BLUETOOTH_ADMIN = 34
+        const val NAME = "BluetoothTest"
+        val APP_UUID = UUID.fromString(NAME)
+        const val DEVICE_NAME = "SBH20"
     }
 }
