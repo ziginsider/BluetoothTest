@@ -40,13 +40,22 @@ class MainActivity : AppCompatActivity(), CallbackProxy, CallbackReceiver {
     private fun checkBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         if (bluetoothAdapter == null) {
-            outputTextView.append("No bluetooth device :(")
+            outputTextView.append("No bluetooth device :(\n")
             buttonStartConnect.isEnabled = false
         }
     }
 
     private fun startConnect() {
-        onBluetoothConnected()
+        if (bluetoothAdapter?.isEnabled!!) {
+            onBluetoothConnected()
+            return
+        }
+
+        if (bluetoothAdapter?.enable()!!) {
+            BluetoothBroadcastReceiver.register(this, this)
+        } else {
+            loge(TAG, "[ Unable to enable Bluetooth ]")
+        }
     }
 
     override fun onHeadSetProxyReceived(proxy: BluetoothHeadset) {
@@ -55,11 +64,15 @@ class MainActivity : AppCompatActivity(), CallbackProxy, CallbackReceiver {
 
         if (connect == null || device == null) {
             logi(TAG, "[ No connect method or no device found ]")
+            return
         }
 
+        outputTextView.append("Connected device with name = ${device.name}" +
+                " and address = ${device.address} ")
+
         try {
-            connect?.isAccessible = true
-            connect?.invoke(proxy, device)
+            connect.isAccessible = true
+            connect.invoke(proxy, device)
         } catch (e: InvocationTargetException) {
             loge(TAG, "Unable to invoke connect(BluetoothDevice) method on proxy.")
             e.printStackTrace()
